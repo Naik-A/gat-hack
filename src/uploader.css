@@ -1,0 +1,98 @@
+.Uploader {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .image-item {
+    flex: 0 0 auto;
+    width: 300px;
+    height: 300px;
+    position: relative;
+    margin: 0 10px;
+  }
+  
+  .image-preview {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+  }
+  
+  .image-preview:hover {
+    transform: scale(1.2);
+    z-index: 1;
+  }
+  
+  .main {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .prompt-text {
+    width: 300px;
+    margin-top: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .user-input {
+    width: 300px;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .remove-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    z-index: 3;
+  }
+  
+  .dropzone {
+    border: 2px dashed blue;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    transition: background-color 0.2s;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+  }
+  
+  .dropzone:hover {
+    background-color: rgba(173, 216, 230, 0.5);
+  }
+  
+  .scroll-button {
+    margin-top: 20px;
+  }
+  
+  .gray-background {
+    background-color: rgba(200, 200, 200, 0.5);
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
