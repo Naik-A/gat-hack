@@ -1,5 +1,5 @@
 // src/apiService.js
-const API_BASE_URL = "http://localhost:8000"; // Update if your backend runs elsewhere
+const API_BASE_URL = "http://localhost:8000"; 
 
 export const uploadImage = async (file) => {
   const formData = new FormData();
