@@ -1,62 +1,34 @@
-// src/apiService.js
-const API_BASE_URL = "http://localhost:8000"; 
+import axios from "axios";
+
+const API_BASE_URL = "http://127.0.0.1:8000"; 
 
 export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch(`${API_BASE_URL}/upload-image`, {
-    method: "POST",
-    body: formData,
+  const response = await axios.post(`${API_BASE_URL}/upload-image`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Failed to upload image");
-  }
-
-  return response.json();
+  return response.data; 
 };
 
 export const analyzeImage = async () => {
-  const response = await fetch(`${API_BASE_URL}/analyze-image`, {
-    method: "GET",
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Failed to analyze image");
-  }
-
-  return response.json();
+  const response = await axios.get(`${API_BASE_URL}/analyze-image`);
+  return response.data; 
 };
 
 export const generateCaptionGenre = async (context) => {
-  const response = await fetch(`${API_BASE_URL}/generate-caption-genre`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ context }),
+  const response = await axios.post(`${API_BASE_URL}/generate-caption-genre`, {
+    context,
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Failed to generate caption and genre");
-  }
-
-  return response.json();
+  return response.data; 
 };
 
 export const deleteImages = async () => {
-  const response = await fetch(`${API_BASE_URL}/delete-images`, {
-    method: "DELETE",
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Failed to delete images");
-  }
-
-  return response.json();
+  const response = await axios.delete(`${API_BASE_URL}/delete-images`);
+  return response.data; 
 };
