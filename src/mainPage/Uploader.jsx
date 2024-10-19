@@ -1,8 +1,7 @@
-// src/mainPage/Uploader.jsx
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import "../uploader.css";
-import { uploadImage, analyzeImage, generateCaptionGenre, deleteImages } from "../apiService";
+import { uploadImage, analyzeImage, generateCaptionGenre, deleteImages } from "../apiService"; 
 
 function Uploader() {
   const [files, setFiles] = useState([]);
@@ -12,6 +11,7 @@ function Uploader() {
   const [captionGenre, setCaptionGenre] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [captionInput, setCaptionInput] = useState(''); 
 
   const onDrop = useCallback(async (acceptedFiles) => {
     try {
@@ -47,11 +47,12 @@ function Uploader() {
     try {
       setLoading(true);
       const result = await analyzeImage();
+      console.log("Analysis Result:", result);
       setAnalysisResult(result);
       setLoading(false);
       setError(null);
     } catch (err) {
-      console.error(err);
+      console.error("Analysis Error:", err);
       setError(err.message);
       setLoading(false);
     }
@@ -60,13 +61,14 @@ function Uploader() {
   const handleGenerateCaptionGenre = async () => {
     try {
       setLoading(true);
-      const context = "Describe the image and determine its genre.";
+      const context = { context: captionInput }; 
       const result = await generateCaptionGenre(context);
+      console.log("Caption & Genre Result:", result);
       setCaptionGenre(result);
       setLoading(false);
       setError(null);
     } catch (err) {
-      console.error(err);
+      console.error("Caption/Genre Error:", err);
       setError(err.message);
       setLoading(false);
     }
@@ -97,31 +99,52 @@ function Uploader() {
               className="image-preview"
             />
             <div className="button-group">
-            <button className="button" onClick={handleAnalyze} disabled={loading}>
-              {loading ? "Analyzing..." : "Analyze Image"}
-            </button>
-            <button className="button" onClick={handleGenerateCaptionGenre} disabled={loading}>
-              {loading ? "Generating..." : "Generate Caption & Genre"}
-            </button>
-            <button className="button delete-button" onClick={removeFile}>
-              &times; Delete Image
-            </button>
-          </div>
+              <button className="button" onClick={handleAnalyze} disabled={loading}>
+                {loading ? "Analyzing..." : "Analyze Image"}
+              </button>
+              <textarea
+                value={captionInput}
+                onChange={(e) => setCaptionInput(e.target.value)} 
+                placeholder="Enter your caption here..."
+                rows={4}
+                style={{ width: "100%", margin: "10px 0" }}
+              />
+              <button className="button" onClick={handleGenerateCaptionGenre} disabled={loading}>
+                {loading ? "Generating..." : "Generate Caption & Genre"}
+              </button>
+              <button className="button delete-button" onClick={removeFile}>
+                &times; Delete Image
+              </button>
+            </div>
             <div className="result-section">
               {analysisResult && (
-                <>
+                <div>
                   <h3>Analysis Result:</h3>
-                  <p>Objects Detected: {analysisResult.objects_detected.join(", ")}</p>
-                  <p>Image Quality: {analysisResult.image_quality}</p>
-                  <p>Notes: {analysisResult.notes}</p>
-                </>
+                  <ul style={{ listStyleType: "none", padding: 0, textAlign: "left" }}>
+                    {analysisResult.image_description && (
+                      <li>
+                        <strong>Image Description:</strong> {analysisResult.image_description}
+                      </li>
+                    )}
+                    {analysisResult.trackable && (
+                      <li>
+                        <strong>Trackable:</strong> {analysisResult.trackable}
+                      </li>
+                    )}
+                  </ul>
+                </div>
               )}
+
               {captionGenre && (
-                <>
+                <div>
                   <h3>Caption & Genre:</h3>
-                  <p>Caption: {captionGenre.caption}</p>
-                  <p>Genre: {captionGenre.genre}</p>
-                </>
+                  <p>
+                    <strong>Caption:</strong> {captionGenre.Caption || 'N/A'}
+                  </p>
+                  <p>
+                    <strong>Genre:</strong> {captionGenre.genre || 'N/A'}
+                  </p>
+                </div>
               )}
             </div>
           </div>
