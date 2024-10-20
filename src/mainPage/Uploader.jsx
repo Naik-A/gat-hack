@@ -61,9 +61,13 @@ function Uploader() {
   const handleGenerateCaptionGenre = async () => {
     try {
       setLoading(true);
-      const context = { context: captionInput }; 
+      const context = { context: captionInput };
+      
+      // Send the caption input via POST and receive the generated result
       const result = await generateCaptionGenre(context);
       console.log("Caption & Genre Result:", result);
+      
+      // Set the result directly from the POST response
       setCaptionGenre(result);
       setLoading(false);
       setError(null);
@@ -112,44 +116,29 @@ function Uploader() {
               <button className="button" onClick={handleGenerateCaptionGenre} disabled={loading}>
                 {loading ? "Generating..." : "Generate Caption & Genre"}
               </button>
-              <button className="button delete-button" onClick={removeFile}>
-                &times; Delete Image
+              <button className="button delete-button" onClick={removeFile} disabled={loading}>
+                Remove Image
               </button>
-            </div>
-            <div className="result-section">
-              {analysisResult && (
-                <div>
-                  <h3>Analysis Result:</h3>
-                  <ul style={{ listStyleType: "none", padding: 0, textAlign: "left" }}>
-                    {analysisResult.image_description && (
-                      <li>
-                        <strong>Image Description:</strong> {analysisResult.image_description}
-                      </li>
-                    )}
-                    {analysisResult.trackable && (
-                      <li>
-                        <strong>Trackable:</strong> {analysisResult.trackable}
-                      </li>
-                    )}
-                  </ul>
-                </div>
-              )}
-
-              {captionGenre && (
-                <div>
-                  <h3>Caption & Genre:</h3>
-                  <p>
-                    <strong>Caption:</strong> {captionGenre.Caption || 'N/A'}
-                  </p>
-                  <p>
-                    <strong>Genre:</strong> {captionGenre.genre || 'N/A'}
-                  </p>
-                </div>
-              )}
             </div>
           </div>
         )}
       </div>
+
+      {analysisResult && (
+        <div className="analysis-result">
+          <h3>Image Analysis Result:</h3>
+          <p>{analysisResult.image_description}</p>
+          <p>{analysisResult.trackable}</p>
+        </div>
+      )}
+
+      {captionGenre && (
+        <div className="caption-genre-result">
+          <h3>Generated Caption & Genre:</h3>
+          <p>{captionGenre.Caption}</p>
+          <p>Genre: {captionGenre.genre}</p>
+        </div>
+      )}
     </div>
   );
 }
